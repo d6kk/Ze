@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Mera Shehar - Enhanced Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #050814;
+    --bg-card: rgba(15, 23, 42, 0.75);
+    --bg-card-inner: #101935;
+    --border: rgba(255, 255, 255, 0.09);
+    --border-glow: rgba(47, 112, 242, 0.4);
+    
+    --primary: #2f6fed;
+    --primary-glow: rgba(47, 112, 242, 0.5);
+    --gold: #f59e0b;
+    --gold-glow: rgba(245, 158, 11, 0.4);
+    --success: #10b981;
+    --danger: #ef4444;
+    
+    --purple-grad: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+    --blue-grad: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --gold-grad: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+    
+    --font-heading: 'Fredoka', cursive, sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  /* Themes */
+  body.theme-neon { --bg-dark: #060517; --bg-card: rgba(14, 13, 46, 0.85); --bg-card-inner: #171547; --primary: #d946ef; --primary-glow: rgba(217, 70, 239, 0.5); }
+  body.theme-nature { --bg-dark: #05140b; --bg-card: rgba(10, 36, 21, 0.85); --bg-card-inner: #113821; --primary: #10b981; --primary-glow: rgba(16, 185, 129, 0.5); }
+  body.theme-winter { --bg-dark: #071324; --bg-card: rgba(15, 34, 61, 0.85); --bg-card-inner: #173258; --primary: #38bdf8; --primary-glow: rgba(56, 189, 248, 0.5); }
+  body.theme-desert { --bg-dark: #190f07; --bg-card: rgba(46, 27, 13, 0.85); --bg-card-inner: #452914; --primary: #f97316; --primary-glow: rgba(249, 115, 22, 0.5); }
+  body.theme-galaxy { --bg-dark: #0b031c; --bg-card: rgba(25, 10, 56, 0.85); --bg-card-inner: #291258; --primary: #a855f7; --primary-glow: rgba(168, 85, 247, 0.5); }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; }
+  
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #020409;
+    color: #ffffff;
+    font-family: var(--font-body);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .app-frame {
+    width: 100%;
+    max-width: 440px;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media (min-width: 450px) {
+    .app-frame {
+      height: 900px;
+      border-radius: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 60px rgba(0,0,0,0.9), 0 0 40px var(--primary-glow);
+    }
+  }
+
+  /* Header */
+  .top-header {
+    padding: 14px 16px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 20;
+    background: var(--bg-dark);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .icon-nav-btn {
+    background: var(--bg-card-inner);
+    border: 1px solid var(--border);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s ease;
+  }
+  .icon-nav-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.1); }
+  .header-titles { text-align: left; }
+  .header-titles h1 {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    letter-spacing: 0.5px;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(47, 112, 242, 0.18);
+    border: 1px solid var(--border-glow);
+    color: #60a5fa;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+  }
+
+  /* Content Scroll Area */
+  .page-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px 110px;
+    scrollbar-width: none;
+  }
+  .page-scroll-area::-webkit-scrollbar { display: none; }
+  .screen-tab { display: none; }
+  .screen-tab.active { display: block; animation: tabFade 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes tabFade { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  /* 3D DIORAMA SCENIC STAGE */
+  .diorama-stage {
+    width: 100%;
+    height: 220px;
+    border-radius: 24px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 14px;
+    background: linear-gradient(180deg, #3a88e9 0%, #68aaf5 40%, #b2daf8 70%, #d8efff 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+    transition: background 1.5s ease;
+  }
+  .diorama-stage.night-mode {
+    background: linear-gradient(180deg, #090a1c 0%, #17153a 50%, #282154 100%);
+  }
+
+  .scenic-cloud {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 50px;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+    animation: driftClouds 20s linear infinite;
+    pointer-events: none;
+  }
+  .cloud-1 { top: 20px; left: -40px; width: 75px; height: 22px; }
+  .cloud-2 { top: 50px; left: 180px; width: 55px; height: 16px; animation-duration: 26s; }
+  @keyframes driftClouds { 0%{transform:translateX(-100px);} 100%{transform:translateX(500px);} }
+
+  .scenic-skyline {
+    position: absolute;
+    bottom: 46px;
+    left: 0;
+    right: 0;
+    height: 70px;
+    opacity: 0.35;
+    background-repeat: repeat-x;
+    background-size: 160px auto;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50'%3E%3Cpath fill='%231d4ed8' d='M0 50 L0 25 L6 25 L6 15 L14 15 L14 50 L20 50 L20 20 L28 20 L28 10 L36 10 L36 50 L44 50 L44 30 L52 30 L52 5 L64 5 L64 50 L74 50 L74 18 L84 18 L84 50 Z'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .scenic-road {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    background: linear-gradient(180deg, #475569 0%, #334155 100%);
+    border-top: 3px solid #64748b;
+    pointer-events: none;
+  }
+  .road-markings {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: repeating-linear-gradient(90deg, #fbbf24, #fbbf24 16px, transparent 16px, transparent 32px);
+  }
+
+  .diorama-row {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    height: 160px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-evenly;
+    padding: 0 6px;
+    z-index: 10;
+  }
+  .diorama-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    width: 80px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .diorama-slot:active { transform: scale(0.92); }
+
+  .model-vector {
+    width: 60px;
+    height: 60px;
+    margin-bottom: -6px;
+    z-index: 5;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.35));
+    animation: modelFloat 3s ease-in-out infinite alternate;
+  }
+  @keyframes modelFloat { 0%{transform:translateY(0);} 100%{transform:translateY(-4px);} }
+
+  .base-pedestal {
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.5), 0 6px 12px rgba(0,0,0,0.35);
+  }
+  .pedestal-ghar { background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%); }
+  .pedestal-dukaan { background: linear-gradient(180deg, #38bdf8 0%, #0369a1 100%); }
+  .pedestal-park { background: linear-gradient(180deg, #4ade80 0%, #15803d 100%); }
+  .pedestal-factory { background: linear-gradient(180deg, #94a3b8 0%, #475569 100%); }
+
+  /* Floating Tap FX */
+  .floating-tap-fx {
+    position: absolute;
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 700;
+    color: #fbbf24;
+    pointer-events: none;
+    z-index: 100;
+    animation: floatUpFade 0.75s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+  }
+  @keyframes floatUpFade {
+    0% { opacity: 1; transform: translate(-50%, 0) scale(0.8); }
+    50% { transform: translate(-50%, -24px) scale(1.1); }
+    100% { opacity: 0; transform: translate(-50%, -45px) scale(1); }
+  }
+
+  /* Dual Score Widget */
+  .stat-card-dual {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .stat-subcell { text-align: center; }
+  .stat-subcell:first-child { border-right: 1px solid var(--border); }
+  .stat-label-tiny {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .stat-val-giant {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .stat-rate-green {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--success);
+    margin-top: 2px;
+  }
+
+  /* List Items Stack */
+  .entry-items-stack { display: flex; flex-direction: column; gap: 8px; }
+  .entry-row-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color 0.2s ease, transform 0.1s ease;
+  }
+  .entry-avatar-box {
+    width: 44px;
+    height: 44px;
+    background: var(--bg-card-inner);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+  .entry-info-col { flex: 1; margin-left: 12px; }
+  .entry-info-col h4 {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+  }
+  .entry-info-col p {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  /* UI-UX Pro Cost Button with Affordability State */
+  .blue-cost-pill {
+    border: none;
+    background: var(--blue-grad);
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px var(--primary-glow);
+    transition: transform 0.1s, opacity 0.2s, filter 0.2s;
+  }
+  .blue-cost-pill:active { transform: scale(0.94); }
+  .blue-cost-pill.cannot-afford {
+    opacity: 0.45;
+    filter: grayscale(0.5);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  /* Segmented Navigation */
+  .segmented-nav-bar {
+    display: flex;
+    background: #0d1428;
+    border: 1px solid var(--border);
+    padding: 4px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+  }
+  .seg-button {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 8px 0;
+    border-radius: 10px;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .seg-button.active {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 2px 10px var(--primary-glow);
+  }
+  .seg-button.locked-tab { opacity: 0.6; }
+
+  /* Specials Locked Card View */
+  .specials-locked-box {
+    background: #0d142a;
+    border: 1px dashed rgba(239, 68, 68, 0.4);
+    border-radius: 20px;
+    padding: 22px 16px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .specials-locked-icon {
+    font-size: 40px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 10px rgba(239,68,68,0.5));
+  }
+  .specials-locked-title {
+    font-family: var(--font-heading);
+    font-size: 17px;
+    color: #f87171;
+    margin-bottom: 4px;
+  }
+  .specials-locked-desc {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+  .lock-progress-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .lock-prog-item {
+    background: #131c38;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .lock-prog-item.done { border-color: var(--success); color: #4ade80; }
+
+  /* Progress Bar */
+  .bar-track {
+    background: var(--bg-card-inner);
+    height: 6px;
+    border-radius: 8px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    background: var(--primary);
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Bottom Nav */
+  .bottom-navbar-dock {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    background: rgba(8, 12, 26, 0.92);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px env(safe-area-inset-bottom, 6px);
+    z-index: 50;
+  }
+  .dock-nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 60px;
+    transition: all 0.2s ease;
+  }
+  .dock-nav-btn .nav-symbol { font-size: 20px; transition: transform 0.2s; }
+  .dock-nav-btn.active { color: #ffffff; }
+  .dock-nav-btn.active .nav-symbol {
+    transform: translateY(-2px);
+    background: rgba(47, 112, 242, 0.25);
+    border-radius: 12px;
+    padding: 2px 10px;
+    color: #60a5fa;
+  }
+
+  /* Modals */
+  .modal-screen-mask {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 4, 10, 0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 100;
+  }
+  .modal-screen-mask.open { display: flex; }
+  .modal-card-box {
+    background: #0f172e;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 320px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    animation: popIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes popIn { from{transform:scale(0.9);opacity:0;} to{transform:scale(1);opacity:1;} }
+
+  .settings-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .toggle-switch {
+    width: 42px;
+    height: 22px;
+    background: #334155;
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .toggle-switch.on { background: var(--success); }
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .toggle-switch.on::after { transform: translateX(20px); }
+
+  /* Toast Notification */
+  .toast-banner {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: #111a33;
+    border: 1px solid var(--primary);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 200;
+    pointer-events: none;
+  }
+  .toast-banner.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="app-frame">
+  <div class="toast-banner" id="toastMessage">⚡ Level Up!</div>
+
+  <!-- Header -->
+  <header class="top-header">
+    <div class="header-left">
+      <button class="icon-nav-btn" onclick="switchTab('stats')">📊</button>
+      <div class="header-titles">
+        <h1 id="headerMainTitle">🏙️ Mera Shehar</h1>
+        <div class="header-badge" id="headerCityBadge">👥 Level 1</div>
+      </div>
+    </div>
+    <button class="icon-nav-btn" onclick="openModal('settingsModal')" title="Settings">⚙️</button>
+  </header>
+
+  <!-- Main Scrollable Content -->
+  <main class="page-scroll-area">
+    
+    <!-- 1. HOME SCREEN -->
+    <section class="screen-tab active" id="tab-shehar">
+      <div class="diorama-stage" id="dioramaStage" onclick="tapToEarn(event)">
+        <div class="scenic-cloud cloud-1"></div>
+        <div class="scenic-cloud cloud-2"></div>
+        <div class="scenic-skyline"></div>
+        <div class="scenic-road"><div class="road-markings"></div></div>
+
+        <div class="diorama-row">
+          <div class="diorama-slot" onclick="event.stopPropagation(); instantBuy('house')">
+            <svg class="model-vector" viewBox="0 0 64 64">
+              <path d="M6 30 L32 10 L58 30 L52 30 L52 56 L12 56 L12 30 Z" fill="#d97706"/>
+              <path d="M4 30 L32 8 L60 30 L52 30 L32 14 L12 30 Z" fill="#dc2626"/>
+              <rect x="42" y="14" width="6" height="12" fill="#78350f"/>
+              <rect x="18" y="36" width="12" height="12" rx="2" fill="#fef08a" stroke="#78350f" stroke-width="2"/>
+              <rect x="34" y="34" width="12" height="22" rx="2" fill="#78350f"/>
+            </svg>
+            <div class="base-pedestal pedestal-ghar"></div>
+          </div>
+
+          <div class="diorama-slot" onclick="event.stopPropagation(); instantBuy('shop')">
+            <svg class="model-vector" viewBox="0 0 64 64">
+              <rect x="10" y="20" width="44" height="36" rx="4" fill="#0284c7"/>
+              <rect x="18" y="8" width="28" height="14" rx="2" fill="#dc2626"/>
+              <text x="32" y="19" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">24</text>
+              <path d="M8 22 L56 22 L50 28 L14 28 Z" fill="#38bdf8"/>
+              <rect x="16" y="32" width="14" height="16" rx="2" fill="#e0f2fe"/>
+              <rect x="34" y="32" width="14" height="24" rx="2" fill="#0369a1"/>
+            </svg>
+            <div class="base-pedestal pedestal-dukaan"></div>
+          </div>
+
+          <div class="diorama-slot" onclick="event.stopPropagation(); instantBuy('park')">
+            <svg class="model-vector" viewBox="0 0 64 64">
+              <rect x="28" y="32" width="8" height="22" fill="#78350f"/>
+              <circle cx="32" cy="22" r="18" fill="#22c55e"/>
+              <circle cx="24" cy="18" r="12" fill="#16a34a"/>
+              <circle cx="40" cy="18" r="12" fill="#4ade80"/>
+              <rect x="14" y="46" width="14" height="6" rx="2" fill="#d97706"/>
+              <rect x="16" y="52" width="2" height="4" fill="#451a03"/>
+              <rect x="26" y="52" width="2" height="4" fill="#451a03"/>
+            </svg>
+            <div class="base-pedestal pedestal-park"></div>
+          </div>
+
+          <div class="diorama-slot" onclick="event.stopPropagation(); instantBuy('factory')">
+            <svg class="model-vector" viewBox="0 0 64 64">
+              <rect x="8" y="28" width="48" height="28" rx="2" fill="#475569"/>
+              <rect x="16" y="10" width="8" height="22" fill="#dc2626"/>
+              <rect x="16" y="14" width="8" height="4" fill="#ffffff"/>
+              <rect x="16" y="22" width="8" height="4" fill="#ffffff"/>
+              <rect x="30" y="10" width="8" height="22" fill="#dc2626"/>
+              <rect x="30" y="14" width="8" height="4" fill="#ffffff"/>
+              <rect x="30" y="22" width="8" height="4" fill="#ffffff"/>
+              <circle cx="20" cy="6" r="3" fill="#cbd5e1" opacity="0.8"/>
+              <circle cx="34" cy="6" r="3" fill="#cbd5e1" opacity="0.8"/>
+            </svg>
+            <div class="base-pedestal pedestal-factory"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dual Stats Bar -->
+      <div class="stat-card-dual">
+        <div class="stat-subcell">
+          <div class="stat-label-tiny">Coins</div>
+          <div class="stat-val-giant">🪙 <span id="valCoins">0</span></div>
+          <div class="stat-rate-green" id="rateCoins">+0 / sec</div>
+        </div>
+        <div class="stat-subcell">
+          <div class="stat-label-tiny">Population</div>
+          <div class="stat-val-giant">👥 <span id="valPop">0</span></div>
+          <div class="stat-rate-green" id="ratePop">+0 / sec</div>
+        </div>
+      </div>
+
+      <!-- Quick Upgrade List -->
+      <div class="entry-items-stack" id="homeBuildingsList"></div>
+
+      <!-- Boosts Preview Widget -->
+      <div style="margin-top: 14px;">
+        <div style="font-family: var(--font-heading); font-size: 12px; color: #8897b2; text-transform: uppercase; margin-bottom: 8px;">Active Boosts</div>
+        <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;">
+          <div style="flex:0 0 auto; background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:8px 12px; display:flex; align-items:center; gap:8px;">
+            <span style="font-size: 12px; font-weight: 600;">⚡ 2x Coins (5 min)</span>
+            <button class="blue-cost-pill" style="padding:4px 10px; font-size:11px;" onclick="applyBoost(2, 300)">USE</button>
+          </div>
+          <div style="flex:0 0 auto; background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:8px 12px; display:flex; align-items:center; gap:8px;">
+            <span style="font-size: 12px; font-weight: 600;">👥 Pop Boost (5 min)</span>
+            <button class="blue-cost-pill" style="padding:4px 10px; font-size:11px;" onclick="applyBoost(1.5, 300)">USE</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. UPGRADES SCREEN -->
+    <section class="screen-tab" id="tab-upgrades">
+      <div class="segmented-nav-bar">
+        <button class="seg-button active" id="segBtn-buildings" onclick="switchUpgradeSub('buildings')">Buildings</button>
+        <button class="seg-button" id="segBtn-boosts" onclick="switchUpgradeSub('boosts')">Boosts</button>
+        <button class="seg-button" id="specialsTabBtn" onclick="switchUpgradeSub('specials')">Specials 🔒</button>
+      </div>
+
+      <div id="upg-buildings-sub" class="entry-items-stack"></div>
+
+      <div id="upg-boosts-sub" class="entry-items-stack" style="display: none;">
+        <div class="entry-row-card">
+          <div class="entry-avatar-box">⚡</div>
+          <div class="entry-info-col">
+            <h4>Coins Multiplier</h4>
+            <p>+50% coin production for 5 mins</p>
+          </div>
+          <button class="blue-cost-pill" onclick="applyBoost(1.5, 300)">USE</button>
+        </div>
+        <div class="entry-row-card">
+          <div class="entry-avatar-box">👥</div>
+          <div class="entry-info-col">
+            <h4>Population Surge</h4>
+            <p>+50% population growth rate</p>
+          </div>
+          <button class="blue-cost-pill" onclick="applyBoost(1.5, 300)">USE</button>
+        </div>
+      </div>
+
+      <div id="upg-specials-sub" style="display: none;">
+        <div class="specials-locked-box" id="specialsLockBanner">
+          <div class="specials-locked-icon">🔒</div>
+          <div class="specials-locked-title">SPECIALS LOCKED</div>
+          <div class="specials-locked-desc">
+            Unlock karne ke liye <b>Ghar, Dukaan, Park, aur Factory</b><br>
+            charo ka Level 100 hona zaroori hai!
+          </div>
+          <div class="lock-progress-grid" id="specialsLockGrid"></div>
+        </div>
+
+        <div class="entry-items-stack" id="specialsUnlockedList" style="display: none;">
+          <div class="entry-row-card" style="border-color: rgba(245,158,11,0.5);">
+            <div class="entry-avatar-box" style="background:#2a1b0a;">⚡</div>
+            <div class="entry-info-col">
+              <h4 style="color:#fbbf24;">100x TIME WARP</h4>
+              <p>Skip 100 Hours of production instantly!</p>
+            </div>
+            <button class="blue-cost-pill" style="background:var(--gold-grad); color:#000;" onclick="triggerTimeWarp(100)">⚡ 100X</button>
+          </div>
+          <div class="entry-row-card">
+            <div class="entry-avatar-box">🏗️</div>
+            <div class="entry-info-col">
+              <h4>Super Builder</h4>
+              <p>+50% levels to all buildings</p>
+            </div>
+            <button class="blue-cost-pill" onclick="instantUpgradeAll()">USE</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. STATS SCREEN -->
+    <section class="screen-tab" id="tab-stats">
+      <div class="stat-card-dual">
+        <div class="stat-subcell">
+          <div class="stat-label-tiny">Total Coins Earned</div>
+          <div class="stat-val-giant" style="font-size: 19px;">🪙 <span id="statCoinsTotal">0</span></div>
+        </div>
+        <div class="stat-subcell">
+          <div class="stat-label-tiny">Total Population</div>
+          <div class="stat-val-giant" style="font-size: 19px;">👥 <span id="statPopTotal">0</span></div>
+        </div>
+      </div>
+
+      <!-- Themes -->
+      <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:14px; margin-bottom:12px;">
+        <div style="font-family:var(--font-heading); font-size:12px; color:#8897b2; text-transform:uppercase; margin-bottom:10px;">Select Theme</div>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;">
+          <div style="background:#131c35; border:2px solid var(--primary); border-radius:12px; height:54px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; font-weight:700; cursor:pointer;" onclick="setTheme('default')"><span>🌃</span>Default</div>
+          <div style="background:#131c35; border:1px solid var(--border); border-radius:12px; height:54px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; font-weight:700; cursor:pointer;" onclick="setTheme('neon')"><span>🟣</span>Neon</div>
+          <div style="background:#131c35; border:1px solid var(--border); border-radius:12px; height:54px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; font-weight:700; cursor:pointer;" onclick="setTheme('nature')"><span>🌲</span>Nature</div>
+          <div style="background:#131c35; border:1px solid var(--border); border-radius:12px; height:54px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; font-weight:700; cursor:pointer;" onclick="setTheme('winter')"><span>❄️</span>Winter</div>
+          <div style="background:#131c35; border:1px solid var(--border); border-radius:12px; height:54px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; font-weight:700; cursor:pointer;" onclick="setTheme('desert')"><span>🏜️</span>Desert</div>
+          <div style="background:#131c35; border:1px solid var(--border); border-radius:12px; height:54px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; font-weight:700; cursor:pointer;" onclick="setTheme('galaxy')"><span>🌌</span>Galaxy</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. MISSIONS SCREEN -->
+    <section class="screen-tab" id="tab-missions">
+      <div class="entry-items-stack">
+        <div class="entry-row-card">
+          <div class="entry-avatar-box">🏠</div>
+          <div class="entry-info-col">
+            <h4>Build 10 Ghar</h4>
+            <div class="bar-track"><div class="bar-fill" id="m1-bar" style="width: 0%;"></div></div>
+            <p id="m1-lbl">0 / 10</p>
+          </div>
+          <button class="blue-cost-pill" onclick="claimReward(50)">🪙 50</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. SHOP SCREEN -->
+    <section class="screen-tab" id="tab-shop">
+      <div class="entry-items-stack">
+        <div class="entry-row-card">
+          <div class="entry-avatar-box">🎁</div>
+          <div class="entry-info-col">
+            <h4>Starter Pack</h4>
+            <p>Instant 500 Coins + 2x Boost</p>
+          </div>
+          <button class="blue-cost-pill" onclick="claimReward(500)">CLAIM</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Navigation Dock -->
+  <nav class="bottom-navbar-dock">
+    <button class="dock-nav-btn active" onclick="switchTab('shehar')"><div class="nav-symbol">🏠</div><div>Home</div></button>
+    <button class="dock-nav-btn" onclick="switchTab('upgrades')"><div class="nav-symbol">⬆️</div><div>Upgrades</div></button>
+    <button class="dock-nav-btn" onclick="switchTab('stats')"><div class="nav-symbol">📊</div><div>Stats</div></button>
+    <button class="dock-nav-btn" onclick="switchTab('missions')"><div class="nav-symbol">🚩</div><div>Missions</div></button>
+    <button class="dock-nav-btn" onclick="switchTab('shop')"><div class="nav-symbol">🏪</div><div>Shop</div></button>
+  </nav>
+
+  <!-- Settings Modal -->
+  <div class="modal-screen-mask" id="settingsModal">
+    <div class="modal-card-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; font-family:var(--font-heading); font-size:16px; margin-bottom:12px;">
+        <span>SETTINGS</span>
+        <span style="cursor:pointer; font-size:18px;" onclick="closeModal('settingsModal')">✕</span>
+      </div>
+      <div class="settings-row">
+        <span>Sound SFX</span>
+        <div class="toggle-switch on" id="soundToggle" onclick="toggleSound(this)"></div>
+      </div>
+      <div class="settings-row">
+        <span>Auto-Save</span>
+        <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <button style="width:100%; margin-top:16px; padding:12px 0; border-radius:14px; border:none; background:#1e293b; color:#fff; font-weight:700; cursor:pointer;" onclick="closeModal('settingsModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var CONFIG = {
+    house:   { name: 'Ghar', emoji: '🏠', baseCost: 20, growth: 1.14, popRate: 0.2, coinRate: 0.15, desc: '+0.2 pop/sec, +0.15 coins/sec' },
+    shop:    { name: 'Dukaan', emoji: '🏪', baseCost: 50, growth: 1.15, popRate: 0, coinRate: 0.8, desc: '+0.8 coins/sec' },
+    park:    { name: 'Park', emoji: '🌳', baseCost: 120, growth: 1.16, popRate: 0, coinRate: 0, mult: 0.04, desc: '+4% overall production' },
+    factory: { name: 'Factory', emoji: '🏭', baseCost: 450, growth: 1.18, popRate: 0, coinRate: 4.5, desc: '+4.5 coins/sec (scalable)' }
+  };
+
+  var state = {
+    coins: 20,
+    population: 0,
+    totalCoinsEarned: 0,
+    totalPopGained: 0,
+    multiplier: 1,
+    soundEnabled: true,
+    buildings: { house: 0, shop: 0, park: 0, factory: 0 },
+    lastTime: Date.now()
+  };
+
+  // Load Saved Game
+  var saved = localStorage.getItem('mera_shehar_save');
+  if (saved) {
+    try {
+      var parsed = JSON.parse(saved);
+      state = Object.assign(state, parsed);
+      state.lastTime = Date.now();
+    } catch(e) {}
+  }
+
+  // Web Audio Synth SFX
+  var audioCtx = null;
+  function playSound(type) {
+    if (!state.soundEnabled) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      var now = audioCtx.currentTime;
+      if (type === 'tap') {
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.06);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+        osc.start(now);
+        osc.stop(now + 0.06);
+      } else if (type === 'buy') {
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.08);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+        osc.start(now);
+        osc.stop(now + 0.18);
+      } else if (type === 'error') {
+        osc.frequency.setValueAtTime(180, now);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+        osc.start(now);
+        osc.stop(now + 0.12);
+      }
+    } catch(e) {}
+  }
+
+  function getCost(type) {
+    var count = state.buildings[type] || 0;
+    return Math.ceil(CONFIG[type].baseCost * Math.pow(CONFIG[type].growth, count));
+  }
+
+  function formatNum(n) {
+    if (!isFinite(n) || n < 0) n = 0;
+    if (n < 1e3) return (n % 1 === 0) ? String(Math.round(n)) : n.toFixed(1);
+    var units = ['K', 'M', 'B', 'T'];
+    var idx = -1, val = n;
+    while (val >= 1e3 && idx < units.length - 1) { val /= 1e3; idx++; }
+    return val.toFixed(2) + units[idx];
+  }
+
+  function computeRates() {
+    var parkMult = 1 + (state.buildings.park * CONFIG.park.mult);
+    var popMult = 1 + (state.population * 0.005);
+    var baseCoin = (state.buildings.house * CONFIG.house.coinRate);
+    var scaledCoin = ((state.buildings.shop * CONFIG.shop.coinRate) + (state.buildings.factory * CONFIG.factory.coinRate)) * popMult;
+    
+    return {
+      coinsPerSec: (baseCoin + scaledCoin) * parkMult * state.multiplier,
+      popPerSec: (state.buildings.house * CONFIG.house.popRate) * parkMult
+    };
+  }
+
+  function isSpecialsUnlocked() {
+    return state.buildings.house >= 100 && state.buildings.shop >= 100 &&
+           state.buildings.park >= 100 && state.buildings.factory >= 100;
+  }
+
+  // Tap To Earn with Visual Particle
+  window.tapToEarn = function(e) {
+    state.coins += 1;
+    state.totalCoinsEarned += 1;
+    playSound('tap');
+    
+    var stage = document.getElementById('dioramaStage');
+    var rect = stage.getBoundingClientRect();
+    var x = e.clientX ? (e.clientX - rect.left) : (rect.width / 2);
+    var y = e.clientY ? (e.clientY - rect.top) : (rect.height / 2);
+    
+    var particle = document.createElement('div');
+    particle.className = 'floating-tap-fx';
+    particle.style.left = x + 'px';
+    particle.style.top = y + 'px';
+    particle.textContent = '+1 🪙';
+    stage.appendChild(particle);
+    setTimeout(function(){ particle.remove(); }, 750);
+    
+    updateUI();
+  };
+
+  window.instantBuy = function(type) {
+    var cost = getCost(type);
+    if (state.coins >= cost) {
+      state.coins -= cost;
+      state.buildings[type] += 1;
+      playSound('buy');
+      showToast('🎉 ' + CONFIG[type].name + ' Level ' + state.buildings[type] + '!');
+      updateUI();
+    } else {
+      playSound('error');
+      showToast('❌ Need 🪙 ' + formatNum(cost));
+    }
+  };
+
+  window.instantUpgradeAll = function() {
+    if (!isSpecialsUnlocked()) return;
+    ['house', 'shop', 'park', 'factory'].forEach(function(t) {
+      state.buildings[t] = Math.floor(state.buildings[t] * 1.5) + 1;
+    });
+    playSound('buy');
+    updateUI();
+    showToast('🏗️ Super Builder: All Buildings Boosted!');
+  };
+
+  window.triggerTimeWarp = function(hours) {
+    if (!isSpecialsUnlocked()) return;
+    var rates = computeRates();
+    var gained = Math.max(hours * 100, rates.coinsPerSec * (hours * 3600));
+    state.coins += gained;
+    state.totalCoinsEarned += gained;
+    playSound('buy');
+    updateUI();
+    showToast('⚡ Skipped ' + hours + ' Hours! +🪙' + formatNum(gained));
+  };
+
+  function initBuildingCards() {
+    var html = '';
+    ['house', 'shop', 'park', 'factory'].forEach(function(type) {
+      var item = CONFIG[type];
+      html += '<div class="entry-row-card" id="card-' + type + '">' +
+        '<div class="entry-avatar-box">' + item.emoji + '</div>' +
+        '<div class="entry-info-col">' +
+          '<h4>' + item.name + ' <span style="font-size:11px;color:#60a5fa;margin-left:6px;" id="lvl-' + type + '">Lvl 0</span></h4>' +
+          '<p>' + item.desc + '</p>' +
+        '</div>' +
+        '<button class="blue-cost-pill" id="btn-buy-' + type + '" onclick="instantBuy(\'' + type + '\')">🪙 0</button>' +
+      '</div>';
+    });
+    document.getElementById('homeBuildingsList').innerHTML = html;
+    document.getElementById('upg-buildings-sub').innerHTML = html;
+  }
+
+  function updateSpecialsLockState() {
+    var unlocked = isSpecialsUnlocked();
+    var banner = document.getElementById('specialsLockBanner');
+    var unlockedList = document.getElementById('specialsUnlockedList');
+    var tabBtn = document.getElementById('specialsTabBtn');
+
+    if (unlocked) {
+      banner.style.display = 'none';
+      unlockedList.style.display = 'flex';
+      tabBtn.textContent = 'Specials ⚡';
+      tabBtn.classList.remove('locked-tab');
+    } else {
+      banner.style.display = 'block';
+      unlockedList.style.display = 'none';
+      tabBtn.textContent = 'Specials 🔒';
+      tabBtn.classList.add('locked-tab');
+
+      var grid = document.getElementById('specialsLockGrid');
+      grid.innerHTML = 
+        '<div class="lock-prog-item ' + (state.buildings.house >= 100 ? 'done' : '') + '"><span>🏠 Ghar</span><span>' + Math.min(100, state.buildings.house) + '/100</span></div>' +
+        '<div class="lock-prog-item ' + (state.buildings.shop >= 100 ? 'done' : '') + '"><span>🏪 Dukaan</span><span>' + Math.min(100, state.buildings.shop) + '/100</span></div>' +
+        '<div class="lock-prog-item ' + (state.buildings.park >= 100 ? 'done' : '') + '"><span>🌳 Park</span><span>' + Math.min(100, state.buildings.park) + '/100</span></div>' +
+        '<div class="lock-prog-item ' + (state.buildings.factory >= 100 ? 'done' : '') + '"><span>🏭 Factory</span><span>' + Math.min(100, state.buildings.factory) + '/100</span></div>';
+    }
+  }
+
+  function updateUI() {
+    var rates = computeRates();
+    var totalBuildings = state.buildings.house + state.buildings.shop + state.buildings.park + state.buildings.factory;
+    var cityLevel = Math.max(1, Math.floor(totalBuildings / 5) + 1);
+
+    document.getElementById('valCoins').textContent = formatNum(state.coins);
+    document.getElementById('valPop').textContent = formatNum(Math.floor(state.population));
+    document.getElementById('rateCoins').textContent = '+' + formatNum(rates.coinsPerSec) + ' / sec';
+    document.getElementById('ratePop').textContent = '+' + formatNum(rates.popPerSec) + ' / sec';
+    document.getElementById('headerCityBadge').textContent = '👥 Level ' + cityLevel;
+
+    document.getElementById('statCoinsTotal').textContent = formatNum(state.totalCoinsEarned);
+    document.getElementById('statPopTotal').textContent = formatNum(Math.floor(state.totalPopGained));
+
+    // Update Building Elements Without Thrashing DOM
+    ['house', 'shop', 'park', 'factory'].forEach(function(type) {
+      var cost = getCost(type);
+      var count = state.buildings[type] || 0;
+      var canAfford = state.coins >= cost;
+
+      document.querySelectorAll('#lvl-' + type).forEach(function(el){ el.textContent = 'Lvl ' + count; });
+      document.querySelectorAll('#btn-buy-' + type).forEach(function(btn){
+        btn.textContent = '🪙 ' + formatNum(cost);
+        if (canAfford) {
+          btn.classList.remove('cannot-afford');
+        } else {
+          btn.classList.add('cannot-afford');
+        }
+      });
+    });
+
+    // Mission 1 Update
+    var m1P = Math.min(100, (state.buildings.house / 10) * 100);
+    document.getElementById('m1-bar').style.width = m1P + '%';
+    document.getElementById('m1-lbl').textContent = state.buildings.house + ' / 10';
+
+    updateSpecialsLockState();
+  }
+
+  function tick() {
+    var now = Date.now();
+    var dt = (now - state.lastTime) / 1000;
+    if (dt > 0) {
+      var rates = computeRates();
+      state.coins += rates.coinsPerSec * dt;
+      state.population += rates.popPerSec * dt;
+      state.totalCoinsEarned += rates.coinsPerSec * dt;
+      state.totalPopGained += rates.popPerSec * dt;
+      state.lastTime = now;
+      updateUI();
+    }
+  }
+
+  // Navigation Handlers
+  window.switchTab = function(tab) {
+    document.querySelectorAll('.screen-tab').forEach(function(el){ el.classList.remove('active'); });
+    document.querySelectorAll('.dock-nav-btn').forEach(function(el){ el.classList.remove('active'); });
+
+    document.getElementById('tab-' + tab).classList.add('active');
+    var tabs = ['shehar', 'upgrades', 'stats', 'missions', 'shop'];
+    var idx = tabs.indexOf(tab);
+    if (idx !== -1) document.querySelectorAll('.dock-nav-btn')[idx].classList.add('active');
+
+    var title = document.getElementById('headerMainTitle');
+    if (tab === 'shehar') title.textContent = '🏙️ Mera Shehar';
+    else if (tab === 'upgrades') title.textContent = '⚡ Upgrades';
+    else if (tab === 'stats') title.textContent = '📊 Stats';
+    else if (tab === 'missions') title.textContent = '🚩 Missions';
+    else if (tab === 'shop') title.textContent = '🏪 Shop';
+  };
+
+  window.switchUpgradeSub = function(sub) {
+    document.querySelectorAll('.seg-button').forEach(function(b){ b.classList.remove('active'); });
+    var activeBtn = document.getElementById('segBtn-' + sub) || document.getElementById('specialsTabBtn');
+    if (activeBtn) activeBtn.classList.add('active');
+
+    document.getElementById('upg-buildings-sub').style.display = sub === 'buildings' ? 'flex' : 'none';
+    document.getElementById('upg-boosts-sub').style.display = sub === 'boosts' ? 'flex' : 'none';
+    document.getElementById('upg-specials-sub').style.display = sub === 'specials' ? 'block' : 'none';
+  };
+
+  window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
+  window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
+  
+  window.toggleSound = function(btn) {
+    btn.classList.toggle('on');
+    state.soundEnabled = btn.classList.contains('on');
+    showToast(state.soundEnabled ? '🔊 Sound Enabled' : '🔇 Sound Muted');
+  };
+
+  window.setTheme = function(theme) {
+    document.body.className = theme === 'default' ? '' : 'theme-' + theme;
+    showToast('Theme: ' + theme.toUpperCase());
+  };
+
+  window.showToast = function(msg) {
+    var t = document.getElementById('toastMessage');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 2000);
+  };
+
+  window.applyBoost = function(mul, secs) {
+    state.multiplier = mul;
+    showToast('⚡ ' + mul + 'x Boost Active for ' + (secs/60) + 'm!');
+    setTimeout(function(){ state.multiplier = 1; updateUI(); }, secs * 1000);
+    updateUI();
+  };
+
+  window.claimReward = function(amount) {
+    state.coins += amount;
+    state.totalCoinsEarned += amount;
+    playSound('buy');
+    showToast('🎁 Claimed 🪙 ' + amount + ' Coins!');
+    updateUI();
+  };
+
+  // Auto-Save every 5 seconds
+  setInterval(function() {
+    localStorage.setItem('mera_shehar_save', JSON.stringify(state));
+  }, 5000);
+
+  // Day / Night cycle visual sync
+  setInterval(function() {
+    var stage = document.getElementById('dioramaStage');
+    var isNight = (Math.floor(Date.now() / 30000) % 2 === 0);
+    if (isNight) stage.classList.add('night-mode');
+    else stage.classList.remove('night-mode');
+  }, 1000);
+
+  initBuildingCards();
+  updateUI();
+  setInterval(tick, 200);
+})();
+</script>
+</body>
+</html>
